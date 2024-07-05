@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Memory Generator</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        img {
+            max-width: 80%;
+            height: auto;
+            border: 2px solid #ddd;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.2em;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+        <img id="randomImage" src="" alt="Random Memory">
+        <p id="randomText"></p>
+    </div>
+
+    <script>
+        async function fetchData() {
+            try {
+                const response = await fetch('data.json');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        function getRandomItem(array) {
+            const randomIndex = Math.floor(Math.random() * array.length);
+            return array[randomIndex];
+        }
+
+        async function displayRandomMemory() {
+            const data = await fetchData();
+            if (data) {
+                const randomMemory = getRandomItem(data);
+                document.getElementById('randomImage').src = randomMemory.image;
+                document.getElementById('randomText').textContent = randomMemory.text;
+            }
+        }
+
+        // Display a random memory on page load
+        displayRandomMemory();
+    </script>
+</body>
+</html>
